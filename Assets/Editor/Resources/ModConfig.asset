@@ -13,17 +13,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: findDate
   title: Find the Date
+  author: xDiavo
   description: 'Have you ever wondered what day it was December 25, 1862? Or if the
     27th of June, 2491 is gonna be a Friday or a Saturday? Yeah, me neither...
 
 
-    If you find happen to find some bugs, please comment down below!
+    If you find happen to find some bugs, please comment down below or contact me
+    on Discord with the tag Diavo~#8479!
 
     (Also let me now if you find grammar errors ;D)
 
     The manual is included in the mod.
 
-    Mod creator (he has ktane on this account): https://steamcommunity.com/id/xDiavo'
+    Mod creator: https://steamcommunity.com/id/xDiavo'
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 42ba87e195c8e0b4299bdf21042326eb, type: 3}

@@ -1125,7 +1125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ModuleType: DateFinder
-  ModuleDisplayName: Date Finder
+  ModuleDisplayName: Find The Date
   RequiresTimerVisibility: 0
 --- !u!114 &114402517147402802
 MonoBehaviour:

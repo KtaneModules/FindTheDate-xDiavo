@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System;
+using System.Collections;
+using System.Linq;
 
 public class DateFinder : MonoBehaviour
 {
@@ -86,6 +87,7 @@ public class DateFinder : MonoBehaviour
         for (int i = 0; i < 29; i++) { centuries[i] = i; } //Centuries' setup   
 
         yearCenturyResult = 0;
+        _moduleId = _moduleIdCounter++;
 
         GenerateDate();
 
@@ -99,8 +101,6 @@ public class DateFinder : MonoBehaviour
     {
         bombModule.OnActivate += Activate;
         for (int i = 0; i < 3; i++) { int j = i; buttons[i].OnInteract += delegate () { OnPress(j); return false; }; }
-
-        _moduleId = _moduleIdCounter++;
     }
 
     void Activate()
@@ -147,7 +147,7 @@ public class DateFinder : MonoBehaviour
         currentWeekDay = weekDays[dayIndex];
 
         date = day + " " + monthsAbbr[rndMonthInd] + ",\n" + fullYear;
-        Debug.LogFormat(@"[Date Finder {0}]: generated date: {1}, which is on {2}", _moduleId, date, currentWeekDay);
+        Debug.LogFormat(@"[Date Finder #{0}]: Generated date: {1}, which is on {2}", _moduleId, date.Replace("\n", " "), currentWeekDay);
     }
 
     void OnPress(int n)
@@ -169,9 +169,31 @@ public class DateFinder : MonoBehaviour
     {
         if (weekDays[n] == currentWeekDay) {
             if (count > stages - 2) {
-                bombModule.HandlePass(); Debug.LogFormat(@"[Date Finder {0}]: submitted date is correct!", _moduleId);
+                bombModule.HandlePass(); Debug.LogFormat(@"[Date Finder #{0}]: submitted date is correct!", _moduleId);
                 isActive = false; displayDate.text = ""; return;
             } count++; GenerateDate(); Activate();
-        } else { bombModule.HandleStrike(); Debug.LogFormat(@"[Date Finder {0}]: submitted date is wrong!", _moduleId); return; }
+        } else { bombModule.HandleStrike(); Debug.LogFormat(@"[Date Finder #{0}]: submitted date is wrong!", _moduleId); return; }
+    }
+
+    private string TwitchHelpMessage = "Select a date by using !{0} submit Monday";
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        //Remove submit and spaces from command
+        command = command.ToLowerInvariant().Replace("submit", "").Replace(" ", "").Substring(0, 2);
+        //The Select method will take every value of the weekDays array and just set them to the first two characters.
+        var weekDaysShort = weekDays.Select(x => x.Substring(0, 2).ToLowerInvariant());
+        //report invalid command if the command is not a valid day
+        if (!weekDaysShort.Contains(command))
+            yield break;
+        var desiredDate = weekDaysShort.ToList().IndexOf(command);
+        while (x != desiredDate)
+        {
+            //Return waits to all buttons to be pressed and to let TP know a command is about to be inputted.
+            yield return new WaitForSeconds(0.01f);
+            yield return buttons[1].OnInteract();
+        }
+        yield return new WaitForSeconds(0.1f);
+        yield return buttons[2].OnInteract();
     }
 }
