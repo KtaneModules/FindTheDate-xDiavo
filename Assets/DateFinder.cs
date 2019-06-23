@@ -147,7 +147,7 @@ public class DateFinder : MonoBehaviour
         currentWeekDay = weekDays[dayIndex];
 
         date = day + " " + monthsAbbr[rndMonthInd] + ",\n" + fullYear;
-        Debug.LogFormat(@"[Date Finder #{0}]: Generated date: {1}, which is on {2}", _moduleId, date.Replace("\n", " "), currentWeekDay);
+        Debug.LogFormat(@"[Date Finder #{0}] Generated date: {1}, which is on {2}", _moduleId, date.Replace("\n", " "), currentWeekDay);
     }
 
     void OnPress(int n)
@@ -156,8 +156,6 @@ public class DateFinder : MonoBehaviour
 
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         GetComponent<KMSelectable>().AddInteractionPunch();
-
-        Debug.LogFormat(@"[Date Finder {0}]: pressed button {1}", _moduleId, n);
 
         if (n == 0) { x--; if (x < 0) { x += 7; } buttonText.text = weekDays[x]; }
         else if (n == 1) { x++; if (x > 6) { x -= 7; } buttonText.text = weekDays[x]; }
@@ -169,31 +167,30 @@ public class DateFinder : MonoBehaviour
     {
         if (weekDays[n] == currentWeekDay) {
             if (count > stages - 2) {
-                bombModule.HandlePass(); Debug.LogFormat(@"[Date Finder #{0}]: submitted date is correct!", _moduleId);
+                bombModule.HandlePass(); Debug.LogFormat(@"[Date Finder #{0}] Submitted date is correct.", _moduleId);
                 isActive = false; displayDate.text = ""; return;
             } count++; GenerateDate(); Activate();
-        } else { bombModule.HandleStrike(); Debug.LogFormat(@"[Date Finder #{0}]: submitted date is wrong!", _moduleId); return; }
+        } else { bombModule.HandleStrike(); Debug.LogFormat(@"[Date Finder #{0}] Submitted date is wrong.", _moduleId); return; }
     }
 
-    private string TwitchHelpMessage = "Select a date by using !{0} submit Monday";
+    private string TwitchHelpMessage = "!{0} submit Monday";
 
     IEnumerator ProcessTwitchCommand(string command)
     {
         //Remove submit and spaces from command
         command = command.ToLowerInvariant().Replace("submit", "").Replace(" ", "").Substring(0, 2);
-        //The Select method will take every value of the weekDays array and just set them to the first two characters.
+        //take the first two characters of every value of the weekDays array
         var weekDaysShort = weekDays.Select(x => x.Substring(0, 2).ToLowerInvariant());
         //report invalid command if the command is not a valid day
         if (!weekDaysShort.Contains(command))
             yield break;
         var desiredDate = weekDaysShort.ToList().IndexOf(command);
+        yield return null;
         while (x != desiredDate)
         {
-            //Return waits to all buttons to be pressed and to let TP know a command is about to be inputted.
-            yield return new WaitForSeconds(0.01f);
-            yield return buttons[1].OnInteract();
+            yield return new[] { buttons[1] };
+            yield return "trycancel";
         }
-        yield return new WaitForSeconds(0.1f);
-        yield return buttons[2].OnInteract();
+        yield return new[] { buttons[2] };
     }
 }
