@@ -193,4 +193,17 @@ public class DateFinder : MonoBehaviour
         }
         yield return new[] { buttons[2] };
     }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            while (weekDays[x] != currentWeekDay)
+            {
+                buttons[1].OnInteract();
+                yield return true;
+            }
+            buttons[2].OnInteract();
+        }
+    }
 }
