@@ -178,10 +178,16 @@ public class DateFinder : MonoBehaviour
     IEnumerator ProcessTwitchCommand(string command)
     {
         //Remove submit and spaces from command
-        command = command.ToLowerInvariant().Replace("submit", "").Replace(" ", "").Substring(0, 2);
-        //take the first two characters of every value of the weekDays array
-        var weekDaysShort = weekDays.Select(x => x.Substring(0, 2).ToLowerInvariant());
-        //report invalid command if the command is not a valid day
+        command = command.ToLowerInvariant().Replace("submit", "").Replace(" ", "");
+        var weekDaysShort = new string[0];
+        //Avoid situation where empty or 1 character strings causes an exception.
+        if (command.Length > 1)
+        {
+            command = command.Substring(0, 2);
+            //take the first two characters of every value of the weekDays array
+            weekDaysShort = weekDays.Select(x => x.Substring(0, 2).ToLowerInvariant()).ToArray();
+            //report invalid command if the command is not a valid day
+        }
         if (!weekDaysShort.Contains(command))
             yield break;
         var desiredDate = weekDaysShort.ToList().IndexOf(command);
