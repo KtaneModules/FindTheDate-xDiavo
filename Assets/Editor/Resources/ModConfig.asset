@@ -13,7 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: findDate
   title: Find the Date
-  author: xDiavo
   description: 'Have you ever wondered what day it was December 25, 1862? Or if the
     27th of June, 2491 is gonna be a Friday or a Saturday? Yeah, me neither...
 
@@ -23,7 +22,7 @@ MonoBehaviour:
 
     (Also let me now if you find grammar errors ;D)
 
-    The manual is included in the mod.
+    The manual is included in the mod, and is also available here: https://ktane.timwi.de/HTML/Find%20The%20Date.html
 
     Mod creator: https://steamcommunity.com/id/xDiavo'
   version: 1.0
